@@ -39,7 +39,7 @@ status_urgency_low:
 ```
 
 ## TODO
-[ ] Allow user to select projects he wishes to get issues from
-[x] Filtering by custom fields
-[ ] Filtering by priority (?)
-[ ] ...
+- [ ] Allow user to select projects he wishes to get issues from
+- [x] Filtering by custom fields
+- [ ] Filtering by priority (?)
+- [ ] ...
