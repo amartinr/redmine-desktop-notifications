@@ -20,13 +20,12 @@ def build_message(issue):
     message['body'] = '#' + str(id) + ': ' + subject + '\n' + '<i><b>' + \
                       issue.priority['name'] + '</b> - ' + status_name + '</i>'
 
-    if remote == '0':
-        if status_id in critical_statuses:
-            message['urgency']='critical'
-        elif status_id in unimportant_statuses:
-            message['urgency']='low'
-        else:
-            message['urgency']='normal'
+    if status_id in critical_statuses:
+        message['urgency']='critical'
+    elif status_id in unimportant_statuses:
+        message['urgency']='low'
+    else:
+        message['urgency']='normal'
 
     return message
 
@@ -85,6 +84,13 @@ status_urgency_low = config['status_urgency_low']
 unimportant_statuses = [status['id'] for status in statuses if status['name'] in
                      status_urgency_low]
 
+# transform list of dicts format
+# {'Remote': '0'} -> {'name': 'Remote', 'value': '0'}
+# this is an inclusive filter
+filtered_custom_fields = list()
+for custom_field in config['custom_field_filter']:
+    for key in custom_field.keys():
+        filtered_custom_fields.append({'name': key, 'value': custom_field[key]})
 
 # get sorted list of issues
 issues = sorted(redmine_ieca.issue.filter(assigned_to_id=user_id,
@@ -97,13 +103,19 @@ for issue in issues:
 
     if project_id not in filtered_projects:
         if hasattr(issue, 'custom_fields'):
-            custom_fields = issue.custom_fields
+            # convert redmine.resources.CustomField object list to list of dicts
+            issue_custom_fields = list()
+            for custom_field in issue.custom_fields:
+                issue_custom_fields.append({'name': custom_field['name'],
+                                            'value': custom_field['value']})
 
-            if any("Remoto" in field['name'] for field in custom_fields):
-                remote = [field['value'] for field in custom_fields if
-                          field['name'] == "Remoto"][0]
-    
-                if remote == '0':
+            for custom_field in filtered_custom_fields:
+                if custom_field in issue_custom_fields:
                     message = build_message(issue)
                     send_message(message['title'], message['body'],
-                                message['urgency'])
+                                 message['urgency'])
+                    continue
+        #else:
+        #    message = build_message(issue)
+        #    send_message(message['title'], message['body'],
+        #                 message['urgency'])

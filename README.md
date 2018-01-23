@@ -26,6 +26,9 @@ project_filter:
     - Plan 9
     - Manhattan Project
 
+custom_field_filter:
+    - Remote: '0'
+
 status_urgency_critical:
     - Blocked
     - Awaiting action
@@ -36,7 +39,7 @@ status_urgency_low:
 ```
 
 ## TODO
-* Allow user to select projects he wishes to get issues from
-* Filtering by custom fields
-* Filtering by priority (?)
-* ...
+[ ] Allow user to select projects he wishes to get issues from
+[x] Filtering by custom fields
+[ ] Filtering by priority (?)
+[ ] ...
