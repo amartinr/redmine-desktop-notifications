@@ -26,9 +26,11 @@ project_filter:
     - Plan 9
     - Manhattan Project
 
+# inclusive filter
 custom_field_filter:
     - Remote: '0'
 
+# if not critical nor low, urgency is normal
 status_urgency_critical:
     - Blocked
     - Awaiting action
