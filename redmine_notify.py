@@ -58,12 +58,12 @@ redmine_url = config['url']
 redmine_username = config['username']
 redmine_password = config['password']
 
-redmine_ieca = redmine.Redmine(redmine_url, username=redmine_username,
+redmine_instance = redmine.Redmine(redmine_url, username=redmine_username,
                                password=redmine_password)
 
-user_id = redmine_ieca.user.get('current').id
-statuses = redmine_ieca.issue_status.all()
-projects = redmine_ieca.project.all()
+user_id = redmine_instance.user.get('current').id
+statuses = redmine_instance.issue_status.all()
+projects = redmine_instance.project.all()
 
 # fiter by status
 status_filter = config['status_filter']
@@ -93,7 +93,7 @@ for custom_field in config['custom_field_filter']:
         filtered_custom_fields.append({'name': key, 'value': custom_field[key]})
 
 # get sorted list of issues
-issues = sorted(redmine_ieca.issue.filter(assigned_to_id=user_id,
+issues = sorted(redmine_instance.issue.filter(assigned_to_id=user_id,
                                           status_id=status_id_filter_str),
                 key=lambda issue: issue.priority['id'],
                 reverse=True)
